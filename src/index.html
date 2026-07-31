@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Board - Talent Skills & Pipeline</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="main-container">
+        
+        <section class="section-box">
+            <h1>My Talent Skills</h1>
+            <div class="input-container">
+                <input type="text" id="skillInput" placeholder="Enter a skill (e.g. TypeScript)">
+                <button id="addSkillBtn">Add Skill</button>
+            </div>
+            <div id="skillsContainer"></div>
+        </section>
+
+        <hr class="divider">
+
+        <section class="section-box">
+            <h2>Matched Job Listings</h2>
+            <div id="job-list-container">
+            </div>
+        </section>
+
+        <hr class="divider">
+        <section class="section-box">
+            <h2>Application Pipeline</h2>
+            <div class="pipeline-board">
+                <div class="column" id="column-wishlist">
+                    <h3>Wishlist</h3>
+                    <div class="cards-container"></div>
+                </div>
+                <div class="column" id="column-applied">
+                    <h3>Applied</h3>
+                    <div class="cards-container"></div>
+                </div>
+                <div class="column" id="column-interviewing">
+                    <h3>Interviewing</h3>
+                    <div class="cards-container"></div>
+                </div>
+                <div class="column" id="column-offered">
+                    <h3>Offer  </h3>
+                    <div class="cards-container"></div>
+                </div>
+                <div class="column" id="column-rejected">
+                    <h3> Rejected</h3>
+                    <div class="cards-container"></div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script type="module" src="../dist/app.js"></script>
+</body>
+</html>

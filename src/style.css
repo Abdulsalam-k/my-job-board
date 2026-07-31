@@ -1,0 +1,117 @@
+/* Professional Skill Input & Button Styling */
+.input-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+input#skillInput {
+    flex: 1;
+    max-width: 350px;
+    padding: 10px 14px;
+    font-size: 15px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    background-color: #fff;
+}
+
+input#skillInput:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+button#addSkillBtn {
+    padding: 10px 20px;
+    font-size: 15px;
+    background-color: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.2s;
+}
+
+button#addSkillBtn:hover {
+    background-color: #1d4ed8;
+}
+.main-container {
+    max-width: 1400px;
+    margin: 20px auto;
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+}
+
+.section-box {
+    margin-bottom: 25px;
+}
+
+.divider {
+    border: none;
+    border-top: 1px solid #e5e7eb;
+    margin: 25px 0;
+}
+
+/* Scrollable Job Listings Container (Fixes the endless scrolling) */
+#job-list-container {
+    max-height: 450px;
+    overflow-y: auto;
+    padding-right: 10px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    background-color: #f9fafb;
+    padding: 15px;
+}
+
+/* Custom scrollbar for a polished look */
+#job-list-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+#job-list-container::-webkit-scrollbar-thumb {
+    background-color: #cbd5e1;
+    border-radius: 4px;
+}
+
+/* Kanban Pipeline Board Styling */
+.pipeline-board {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(200px, 1fr));
+    gap: 15px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+}
+
+.column {
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 12px;
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+}
+
+.column h3 {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1e293b;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-top: 0;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #cbd5e1;
+}
+
+.cards-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex-grow: 1;
+}
