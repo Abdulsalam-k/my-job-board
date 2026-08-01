@@ -7,27 +7,31 @@ export function createJobCardElements(job: JobListing, matchScore: number, onApp
     if(matchScore>=70) badgeColor = "bg-green-100 text-green-800";
     else if(matchScore>=40) badgeColor = "bg-yellow-100 text-yellow-800";
 
+    const title = job?.title || 'Untitled Job';
+    const company = job?.company || 'Unknown Company';
+    const url = job?.url || '#';
+    const tags = Array.isArray(job?.tags) ? job.tags : [];
+
     card.innerHTML = `
     <div>
-            <div class="flex justify-between items-start mb-2">
-                <h3 class="font-bold text-lg text-gray-900">${job.title}</h3>
-                <span class="px-2.5 py-1 rounded-full text-xs font-semibold ${badgeColor}">
-                    ${matchScore}% Match
-                </span>
-            </div>
-            <p class="text-gray-600 font-medium mb-3">${job.company}</p>
-            <div class="flex flex-wrap gap-1 mb-4">
-                ${job.tags.map(tag => `<span class="bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded">${tag}</span>`).join('')}
-            </div>
+        <div class="flex justify-between items-start mb-2">
+            <h3 class="font-bold text-lg text-gray-900">${title}</h3>
+            <span class="px-2.5 py-1 rounded-full text-xs font-semibold ${badgeColor}">
+                ${matchScore}% Match
+            </span>
         </div>
-        <div class="flex justify-between items-center mt-4 pt-3 border-t border-gray-100">
-            <a href="${job.url}" target="_blank" class="text-blue-600 text-sm hover:underline">View Original</a>
-            <button class="apply-btn bg-blue-600 text-white px-3 py-1.5 rounded text-sm font-medium hover:bg-blue-700 transition">
-                Track Application
-            </button>
+        <p class="text-gray-600 font-medium mb-3">${company}</p>
+        <div class="flex flex-wrap gap-1 mb-4">
+            ${tags.map(tag => `<span class="bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded">${tag}</span>`).join('')}
         </div>
+    </div>
+    <div class="flex justify-between items-center mt-4 pt-3 border-t border-gray-100">
+        <a href="${url}" target="_blank" class="text-blue-600 text-sm hover:underline">View Original</a>
+        <button class="apply-btn bg-blue-600 text-white px-3 py-1.5 rounded text-sm font-medium hover:bg-blue-700 transition">
+            Track Application
+        </button>
+    </div>
     `;
-
 
     const applyButton = card.querySelector(".apply-btn")
     if(applyButton){
