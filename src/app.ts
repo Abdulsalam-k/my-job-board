@@ -5,13 +5,14 @@ import { renderJoblist, renderPipelineBoard, type ApplicationItem } from './dom.
 import { checkAuth, initAuthListeners } from './auth.js';
 import { renderAdminDashboard } from './admin.js';
 
+const STORAGE_KEY_APPS = 'talent_applications';
+
 document.addEventListener('DOMContentLoaded', async () => {
     
     checkAuth();
     initAuthListeners();
 
     const currentRole = localStorage.getItem('userRole');
-
 
     if (currentRole === 'admin') {
         renderAdminDashboard();
@@ -64,7 +65,19 @@ document.addEventListener('DOMContentLoaded', async () => {
     renderSkills();
 
     const jobListContainer = document.getElementById('job-list-container');
-    let applications: ApplicationItem[] = [];
+    
+
+    let applications: ApplicationItem[] = loadApplicationsFromStorage();
+
+    
+    function loadApplicationsFromStorage(): ApplicationItem[] {
+        const saved = localStorage.getItem(STORAGE_KEY_APPS);
+        return saved ? JSON.parse(saved) : [];
+    }
+
+    function saveApplicationsToStorage() {
+        localStorage.setItem(STORAGE_KEY_APPS, JSON.stringify(applications));
+    }
 
     async function reloadJobsAndScoring() {
         try {
@@ -87,6 +100,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     };
 
                     applications.push(newApp);
+                    saveApplicationsToStorage(); 
                     renderPipelineBoard(applications, handleStatusChange);
                     alert(`Successfully tracked application for ${jobToApply.title} at ${jobToApply.company}!`);
                 });
@@ -107,6 +121,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             return app;
         });
 
+        saveApplicationsToStorage();
         renderPipelineBoard(applications, handleStatusChange);
     }
 
