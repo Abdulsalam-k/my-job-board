@@ -8,25 +8,37 @@ export interface JobListing {
 }
 
 export async function fetchJobListings(): Promise<JobListing[]> {
+    let apiJobs: JobListing[] = [];
+
     try {
         const response = await fetch("https://www.arbeitnow.com/api/job-board-api");
         
-        if (!response.ok) {
-            throw new Error(`Server error: ${response.statusText}`);
+        if (response.ok) {
+            const data = await response.json();
+            apiJobs = data.data.map((job: any, index: number) => ({
+                id: `api-${index}-${Date.now()}`,
+                title: job.title,
+                company: job.company_name,
+                tags: job.tags || [],
+                url: job.url,
+                source: 'api' as const
+            }));
         }
-
-        const data = await response.json();
-
-        return data.data.map((job: any, index: number) => ({
-            id: `api-${index}-${Date.now()}`,
-            title: job.title,
-            company: job.company_name,
-            tags: job.tags || [],
-            url: job.url,
-            source: 'api'
-        }));
     } catch (error) {
-        console.error("Failed to fetch jobs:", error);
-        throw new Error("Unable to load live job listings. Please check your network connection.");
+        console.warn("Could not reach live API, falling back to local/admin jobs only:", error);
     }
+
+
+    const storedAdminJobs = localStorage.getItem('adminJobs');
+    const adminJobs: JobListing[] = storedAdminJobs ? JSON.parse(storedAdminJobs) : [];
+
+    
+    const combinedJobs = [...adminJobs, ...apiJobs];
+
+    
+    if (combinedJobs.length === 0) {
+        throw new Error("Unable to load job listings. Please check your network connection.");
+    }
+
+    return combinedJobs;
 }
