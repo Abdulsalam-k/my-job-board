@@ -1,4 +1,53 @@
-/* Professional Skill Input & Button Styling */
+.auth-banner {
+    background-color: #1e293b;
+    color: white;
+    padding: 12px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: Arial, sans-serif;
+    border-bottom: 3px solid #0f172a;
+}
+
+.auth-info span {
+    color: #38bdf8;
+    font-weight: bold;
+}
+
+.auth-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.auth-banner button {
+    border: none;
+    padding: 8px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    transition: opacity 0.2s;
+}
+
+.auth-banner button:hover {
+    opacity: 0.9;
+}
+
+.btn-talent {
+    background-color: #3b82f6;
+    color: white;
+}
+
+.btn-admin {
+    background-color: #f59e0b;
+    color: white;
+}
+
+.btn-logout {
+    background-color: #ef4444;
+    color: white;
+    display: none; 
+}
 .input-container {
     display: flex;
     align-items: center;
@@ -57,7 +106,6 @@ button#addSkillBtn:hover {
     margin: 25px 0;
 }
 
-/* Scrollable Job Listings Container (Fixes the endless scrolling) */
 #job-list-container {
     max-height: 450px;
     overflow-y: auto;
@@ -68,7 +116,6 @@ button#addSkillBtn:hover {
     padding: 15px;
 }
 
-/* Custom scrollbar for a polished look */
 #job-list-container::-webkit-scrollbar {
     width: 6px;
 }
@@ -78,7 +125,6 @@ button#addSkillBtn:hover {
     border-radius: 4px;
 }
 
-/* Kanban Pipeline Board Styling */
 .pipeline-board {
     display: grid;
     grid-template-columns: repeat(5, minmax(200px, 1fr));
