@@ -161,3 +161,39 @@ button#addSkillBtn:hover {
     gap: 10px;
     flex-grow: 1;
 }
+.stats-container {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.stat-card {
+    flex: 1;
+    background: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    padding: 12px;
+    border-radius: 6px;
+    text-align: center;
+}
+
+.stat-label {
+    font-size: 11px;
+    color: #666;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.stat-value {
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+}
+
+.stat-value.interviewing {
+    color: #0066cc; 
+}
+
+.stat-value.offered {
+    color: #28a745; 
+}

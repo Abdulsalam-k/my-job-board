@@ -1,4 +1,5 @@
 import type { JobListing } from "./api.js";
+
 export function createJobCardElements(job: JobListing, matchScore: number, onApply: (job: JobListing) => void): HTMLElement{
     const card = document.createElement('div')
     card.className = 'job-card bg-white p-4 rounded-lg shadow-md border border-gray-200 flex flex-col justify-between';
@@ -40,6 +41,7 @@ export function createJobCardElements(job: JobListing, matchScore: number, onApp
 
     return card;
 }
+
 export function renderJoblist(
     container: HTMLElement,
     jobs: {job: JobListing, score: number}[],
@@ -55,16 +57,20 @@ export function renderJoblist(
         container.appendChild(card);
     });
 }
+
 export interface ApplicationItem{
     id: string;
     jobTitle: string;
     company: string;
     status: "wishlist" | "applied" | "interviewing" | "offered" | "rejected"
 }
+
 export function renderPipelineBoard(
     application: ApplicationItem[],
     onStatusChange:( appId: string, newStatus: string) => void
 ) {
+    updateApplicationStats(application);
+
     const columns = [
         {id: "wishlist", title: "Wishlist"},
         {id: "applied", title: "Applied"},
@@ -105,8 +111,26 @@ export function renderPipelineBoard(
                     })
                 }
                 colContainer.appendChild(appCard)
-
         })
     });
+}
 
+export function updateApplicationStats(applications: ApplicationItem[]) {
+    const totalElem = document.getElementById('stat-total');
+    const interviewingElem = document.getElementById('stat-interviewing');
+    const offeredElem = document.getElementById('stat-offered');
+
+    if (totalElem) {
+        totalElem.textContent = applications.length.toString();
+    }
+
+    if (interviewingElem) {
+        const interviewingCount = applications.filter(app => app.status === 'interviewing').length;
+        interviewingElem.textContent = interviewingCount.toString();
+    }
+
+    if (offeredElem) {
+        const offeredCount = applications.filter(app => app.status === 'offered').length;
+        offeredElem.textContent = offeredCount.toString();
+    }
 }

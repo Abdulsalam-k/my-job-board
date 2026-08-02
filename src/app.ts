@@ -8,7 +8,7 @@ import { renderAdminDashboard } from './admin.js';
 const STORAGE_KEY_APPS = 'talent_applications';
 
 document.addEventListener('DOMContentLoaded', async () => {
-    
+
     checkAuth();
     initAuthListeners();
 
@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (currentRole === 'admin') {
         renderAdminDashboard();
-        return; 
+        return;
     }
 
     const skillInput = document.getElementById('skillInput') as HTMLInputElement;
@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             skillBadge.style.fontSize = '14px';
             skillBadge.style.cursor = 'pointer';
             skillBadge.title = 'Click to remove';
-            
+
             skillBadge.addEventListener('click', () => {
                 removetTalenSkill(skill);
                 renderSkills();
@@ -65,11 +65,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     renderSkills();
 
     const jobListContainer = document.getElementById('job-list-container');
-    
+    const searchInput = document.getElementById('searchInput') as HTMLInputElement;
+
 
     let applications: ApplicationItem[] = loadApplicationsFromStorage();
+    let allScoredJobs: { job: JobListing; score: number }[] = [];
 
-    
+
     function loadApplicationsFromStorage(): ApplicationItem[] {
         const saved = localStorage.getItem(STORAGE_KEY_APPS);
         return saved ? JSON.parse(saved) : [];
@@ -77,40 +79,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     function saveApplicationsToStorage() {
         localStorage.setItem(STORAGE_KEY_APPS, JSON.stringify(applications));
-    }
-
-    async function reloadJobsAndScoring() {
-        try {
-            const currentSkills = getTalentsSkills();
-            const rawJobs = await fetchJobListings();
-
-            let scoredJobs = rawJobs.map(job => {
-                const score = calculateMatchScore(currentSkills, job.tags);
-                return { job, score };
-            });
-            scoredJobs.sort((a, b) => b.score - a.score);
-
-            if (jobListContainer) {
-                renderJoblist(jobListContainer, scoredJobs, (jobToApply) => {
-                    const newApp: ApplicationItem = {
-                        id: Date.now().toString(),
-                        jobTitle: jobToApply.title,
-                        company: jobToApply.company,
-                        status: 'applied'
-                    };
-
-                    applications.push(newApp);
-                    saveApplicationsToStorage(); 
-                    renderPipelineBoard(applications, handleStatusChange);
-                    alert(`Successfully tracked application for ${jobToApply.title} at ${jobToApply.company}!`);
-                });
-            }
-        } catch (error) {
-            console.error('Failed to load job listings:', error);
-            if (jobListContainer) {
-                jobListContainer.innerHTML = '<p style="color: red;">Failed to load job listings. Please try again later.</p>';
-            }
-        }
     }
 
     function handleStatusChange(appId: string, newStatus: string) {
@@ -123,6 +91,68 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         saveApplicationsToStorage();
         renderPipelineBoard(applications, handleStatusChange);
+    }
+
+    async function reloadJobsAndScoring() {
+        try {
+            const currentSkills = getTalentsSkills();
+            const rawJobs = await fetchJobListings();
+
+            let scoredJobs = rawJobs.map(job => {
+                const score = calculateMatchScore(currentSkills, job.tags);
+                return { job, score };
+            });
+            scoredJobs.sort((a, b) => b.score - a.score);
+            allScoredJobs = scoredJobs;
+
+            if (jobListContainer) {
+                renderJoblist(jobListContainer, scoredJobs, (jobToApply) => {
+                    const newApp: ApplicationItem = {
+                        id: Date.now().toString(),
+                        jobTitle: jobToApply.title,
+                        company: jobToApply.company,
+                        status: 'applied'
+                    };
+
+                    applications.push(newApp);
+                    saveApplicationsToStorage();
+                    renderPipelineBoard(applications, handleStatusChange);
+                    alert(`Successfully tracked application for ${jobToApply.title} at ${jobToApply.company}!`);
+                });
+            }
+        } catch (error) {
+            console.error('Failed to load job listings:', error);
+            if (jobListContainer) {
+                jobListContainer.innerHTML = '<p style="color: red;">Failed to load job listings. Please try again later.</p>';
+            }
+        }
+    }
+
+    function renderFilteredJobs() {
+        if (!jobListContainer) return;
+        const query = searchInput?.value.trim().toLowerCase() || '';
+        const filteredJobs = allScoredJobs.filter(({ job }) => {
+            const titleMatch = job.title.toLowerCase().includes(query);
+            const companyMatch = job.company.toLowerCase().includes(query);
+            return titleMatch || companyMatch;
+        });
+        renderJoblist(jobListContainer, filteredJobs, (jobToApply) => {
+            const newApp: ApplicationItem = {
+                id: Date.now().toString(),
+                jobTitle: jobToApply.title,
+                company: jobToApply.company,
+                status: 'applied'
+            };
+
+            applications.push(newApp);
+            saveApplicationsToStorage();
+            renderPipelineBoard(applications, handleStatusChange);
+            alert(`Successfully tracked application for ${jobToApply.title} at ${jobToApply.company}!`);
+        });
+    }
+
+    if (searchInput) {
+        searchInput.addEventListener('input', renderFilteredJobs);
     }
 
     renderPipelineBoard(applications, handleStatusChange);
